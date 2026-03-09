@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock, patch
 
-import pytest
-
 from sentinel.modules.probe import ProbeScanner
 
 
@@ -21,6 +19,7 @@ def _url_mock(*routes):
             if substr in url:
                 return resp
         return _resp()
+
     return dispatch
 
 
@@ -211,6 +210,7 @@ class TestRateLimiting:
 class TestEndpointUnreachable:
     def test_connection_error_returns_info_finding(self):
         import requests as _req
+
         scanner = ProbeScanner()
         with patch("requests.get", side_effect=_req.exceptions.ConnectionError("refused")):
             result = scanner.scan("http://unreachable.example.com")
@@ -219,6 +219,7 @@ class TestEndpointUnreachable:
 
     def test_timeout_error_returns_info_finding(self):
         import requests as _req
+
         scanner = ProbeScanner()
         with patch("requests.get", side_effect=_req.exceptions.Timeout("timed out")):
             result = scanner.scan("http://slow.example.com")
@@ -226,6 +227,7 @@ class TestEndpointUnreachable:
 
     def test_result_module_is_probe(self):
         import requests as _req
+
         scanner = ProbeScanner()
         with patch("requests.get", side_effect=_req.exceptions.ConnectionError("refused")):
             result = scanner.scan("http://unreachable.example.com")

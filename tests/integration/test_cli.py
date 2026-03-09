@@ -1,4 +1,5 @@
 """CLI integration tests"""
+
 from __future__ import annotations
 
 import json
@@ -93,8 +94,8 @@ class TestConfigCommandOutputFormats:
         result = runner.invoke(cli, ["config", insecure_file, "--format", "json"])
         data = json.loads(result.output)
         rule_ids = [f["rule_id"] for r in data["results"] for f in r["findings"]]
-        assert "CFG-001" in rule_ids  
-        assert "CFG-002" in rule_ids  
+        assert "CFG-001" in rule_ids
+        assert "CFG-002" in rule_ids
 
     def test_sarif_output_is_valid(self, runner, insecure_file):
         result = runner.invoke(cli, ["config", insecure_file, "--format", "sarif"])
@@ -154,7 +155,9 @@ class TestScanCommand:
 
     def test_scan_writes_sarif_file(self, runner, insecure_file, tmp_path):
         out = str(tmp_path / "out.sarif.json")
-        runner.invoke(cli, ["scan", "--config", insecure_file, "--format", "sarif", "--output", out])
+        runner.invoke(
+            cli, ["scan", "--config", insecure_file, "--format", "sarif", "--output", out]
+        )
         assert Path(out).exists()
         sarif = json.loads(Path(out).read_text())
         assert sarif["version"] == "2.1.0"
