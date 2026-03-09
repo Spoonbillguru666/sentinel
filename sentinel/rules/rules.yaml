@@ -1,0 +1,346 @@
+# sentinel rules — 26 checks across config, probe, container modules
+# Each rule has: id, module, severity, check_key, title, rationale, remediation, reference
+
+rules:
+
+  # ── Config module (10 checks) ─────────────────────────────────────────────
+
+  - id: CFG-001
+    module: config
+    severity: CRITICAL
+    check_key: no_auth
+    title: No authentication configured
+    rationale: >
+      MCP servers without authentication allow any client to invoke tools,
+      read resources, and send prompts without identity verification.
+    remediation: >
+      Add an auth block with a supported scheme (bearer, api_key, or oauth2)
+      and configure token validation.
+    reference: auth-001
+
+  - id: CFG-002
+    module: config
+    severity: CRITICAL
+    check_key: plaintext_secrets
+    title: Plaintext secrets detected in config
+    rationale: >
+      Storing secrets (API keys, passwords, tokens) as plaintext in config files
+      exposes credentials to anyone with read access to the file.
+    remediation: >
+      Remove all secrets from config files. Use environment variables or a
+      secrets manager (e.g., Vault, AWS Secrets Manager) instead.
+    reference: sec-002
+
+  - id: CFG-003
+    module: config
+    severity: HIGH
+    check_key: wildcard_permissions
+    title: Wildcard tool permissions configured
+    rationale: >
+      Granting "*" or "all" tool permissions gives clients access to every
+      available tool, violating the principle of least privilege.
+    remediation: >
+      Enumerate the specific tools each client role requires and restrict
+      permissions accordingly.
+    reference: auth-003
+
+  - id: CFG-004
+    module: config
+    severity: HIGH
+    check_key: no_rate_limiting
+    title: No rate limiting configured
+    rationale: >
+      Without rate limiting, MCP endpoints are vulnerable to abuse, resource
+      exhaustion, and denial-of-service attacks.
+    remediation: >
+      Add a rate_limit block specifying requests per second/minute per client
+      and configure appropriate retry-after behaviour.
+    reference: net-001
+
+  - id: CFG-005
+    module: config
+    severity: MEDIUM
+    check_key: debug_mode_enabled
+    title: Debug mode is enabled
+    rationale: >
+      Debug mode often exposes stack traces, internal state, and verbose error
+      messages that provide attackers with reconnaissance information.
+    remediation: >
+      Set debug to false in production configs. Use structured logging with
+      appropriate log levels instead.
+    reference: ops-001
+
+  - id: CFG-006
+    module: config
+    severity: HIGH
+    check_key: no_tls_config
+    title: No TLS configuration found
+    rationale: >
+      Without TLS, all data between clients and the MCP server — including
+      authentication tokens and tool payloads — is transmitted in plaintext.
+    remediation: >
+      Add a tls block specifying cert and key paths. Use TLS 1.2+ and disable
+      weak cipher suites.
+    reference: net-002
+
+  - id: CFG-007
+    module: config
+    severity: HIGH
+    check_key: wildcard_cors
+    title: Wildcard CORS origin configured
+    rationale: >
+      Setting CORS allowed_origins to "*" allows any web page to make
+      cross-origin requests to the MCP server on behalf of authenticated users.
+    remediation: >
+      Replace "*" with an explicit allowlist of trusted origins.
+    reference: net-004
+
+  - id: CFG-008
+    module: config
+    severity: MEDIUM
+    check_key: no_input_validation
+    title: No input validation configured
+    rationale: >
+      Without input validation, MCP tools may receive malformed or malicious
+      payloads that cause unexpected behaviour or injection attacks.
+    remediation: >
+      Enable input validation and configure JSON Schema or similar constraints
+      for all tool input parameters.
+    reference: inp-001
+
+  - id: CFG-009
+    module: config
+    severity: MEDIUM
+    check_key: sensitive_logging
+    title: Sensitive data logging enabled
+    rationale: >
+      Logging authentication tokens, secrets, or full request/response bodies
+      can expose sensitive information through log files or observability tools.
+    remediation: >
+      Configure log_fields to exclude auth headers, tokens, and secrets.
+      Use log scrubbing middleware if available.
+    reference: ops-002
+
+  - id: CFG-010
+    module: config
+    severity: LOW
+    check_key: no_timeout
+    title: No request timeout configured
+    rationale: >
+      Without request timeouts, slow or stalled tool calls can hold connections
+      open indefinitely, degrading availability under load.
+    remediation: >
+      Set timeout_seconds to a value appropriate for your workload (e.g., 30s).
+    reference: ops-003
+
+  # ── Probe module (8 checks) ───────────────────────────────────────────────
+
+  - id: PRB-001
+    module: probe
+    severity: CRITICAL
+    check_key: tls_cert_invalid
+    title: TLS certificate is invalid or expired
+    rationale: >
+      An invalid or expired certificate breaks trust chains, allows MITM attacks,
+      and will cause well-configured clients to refuse the connection.
+    remediation: >
+      Renew the TLS certificate before expiry and ensure the CA chain is complete.
+      Consider automating renewal with Let's Encrypt / ACME.
+    reference: tls-001
+
+  - id: PRB-002
+    module: probe
+    severity: HIGH
+    check_key: weak_tls_version
+    title: Weak TLS version in use (< TLS 1.2)
+    rationale: >
+      TLS 1.0 and 1.1 have known vulnerabilities (BEAST, POODLE) and are
+      deprecated by RFC 8996.
+    remediation: >
+      Configure the server to accept only TLS 1.2 and TLS 1.3.
+      Disable SSLv3, TLS 1.0, and TLS 1.1.
+    reference: tls-002
+
+  - id: PRB-003
+    module: probe
+    severity: CRITICAL
+    check_key: no_auth_endpoint
+    title: Endpoint accepts requests without authentication
+    rationale: >
+      Unauthenticated MCP endpoints allow any party to invoke tools and access
+      resources without identity verification.
+    remediation: >
+      Require authentication on all endpoints. Return 401 for unauthenticated
+      requests and validate tokens server-side.
+    reference: auth-002
+
+  - id: PRB-004
+    module: probe
+    severity: MEDIUM
+    check_key: info_disclosure_headers
+    title: Server version disclosed in response headers
+    rationale: >
+      Headers like Server: Apache/2.4.51 or X-Powered-By reveal technology
+      stack details that help attackers identify known vulnerabilities.
+    remediation: >
+      Remove or mask version-disclosing headers. Set Server to a generic value.
+    reference: hdr-001
+
+  - id: PRB-005
+    module: probe
+    severity: MEDIUM
+    check_key: missing_security_headers
+    title: One or more security headers are absent
+    rationale: >
+      Missing headers (Strict-Transport-Security, X-Content-Type-Options,
+      X-Frame-Options) leave browsers and API clients without important
+      protection signals.
+    remediation: >
+      Add HSTS, X-Content-Type-Options: nosniff, and X-Frame-Options: DENY
+      to all responses.
+    reference: hdr-002
+
+  - id: PRB-006
+    module: probe
+    severity: HIGH
+    check_key: tool_listing_exposed
+    title: Tool listing endpoint is publicly accessible
+    rationale: >
+      Unauthenticated access to the tools/list endpoint reveals the full
+      capability surface, aiding targeted attack planning.
+    remediation: >
+      Require authentication on the tools/list endpoint. Return 401 for
+      unauthenticated requests.
+    reference: auth-004
+
+  - id: PRB-007
+    module: probe
+    severity: LOW
+    check_key: verbose_errors
+    title: Verbose error messages returned
+    rationale: >
+      Detailed error responses (stack traces, file paths, internal IDs) provide
+      attackers with reconnaissance information about the server internals.
+    remediation: >
+      Return generic error messages to clients. Log detailed errors server-side
+      only, scoped by correlation ID.
+    reference: ops-004
+
+  - id: PRB-008
+    module: probe
+    severity: HIGH
+    check_key: no_rate_limiting_probe
+    title: No rate limiting detected on endpoint
+    rationale: >
+      Without observable rate limiting, the endpoint is susceptible to brute
+      force and resource-exhaustion attacks.
+    remediation: >
+      Implement rate limiting and return 429 Too Many Requests with a
+      Retry-After header when limits are exceeded.
+    reference: net-001
+
+  # ── Container module (8 checks) ──────────────────────────────────────────
+
+  - id: CTR-001
+    module: container
+    severity: HIGH
+    check_key: running_as_root
+    title: Container process running as root (UID 0)
+    rationale: >
+      Running as root means a container escape gives the attacker full host
+      privileges. Rootless containers significantly reduce blast radius.
+    remediation: >
+      Add USER <non-root-uid> to the Dockerfile. Use --user in docker run or
+      set securityContext.runAsNonRoot: true in Kubernetes.
+    reference: ctr-001
+
+  - id: CTR-002
+    module: container
+    severity: CRITICAL
+    check_key: privileged_container
+    title: Container running in privileged mode
+    rationale: >
+      Privileged containers have nearly unrestricted access to the host kernel
+      and devices, making them equivalent to running directly on the host.
+    remediation: >
+      Remove --privileged from docker run. Use fine-grained capabilities
+      (--cap-add) instead and drop all others (--cap-drop ALL).
+    reference: ctr-002
+
+  - id: CTR-003
+    module: container
+    severity: MEDIUM
+    check_key: no_resource_limits
+    title: No CPU or memory resource limits set
+    rationale: >
+      Containers without resource limits can consume all available host
+      resources, causing denial of service for co-located workloads.
+    remediation: >
+      Set --memory and --cpus limits in docker run or resources.limits in
+      Kubernetes pod specs.
+    reference: ctr-003
+
+  - id: CTR-004
+    module: container
+    severity: HIGH
+    check_key: sensitive_env_vars
+    title: Sensitive data found in container environment variables
+    rationale: >
+      Secrets stored as plain environment variables are visible in docker inspect
+      output, process listings, and crash dumps.
+    remediation: >
+      Use Docker secrets, Kubernetes Secrets (with encryption at rest), or a
+      secrets manager. Never pass credentials as plain env vars.
+    reference: sec-002
+
+  - id: CTR-005
+    module: container
+    severity: MEDIUM
+    check_key: writable_filesystem
+    title: Container filesystem is writable
+    rationale: >
+      A writable root filesystem allows attackers who gain code execution to
+      persist malware, modify binaries, and tamper with application files.
+    remediation: >
+      Add --read-only to docker run or set readOnlyRootFilesystem: true in
+      Kubernetes. Mount writable volumes only for paths that require it.
+    reference: ctr-004
+
+  - id: CTR-006
+    module: container
+    severity: LOW
+    check_key: no_health_check
+    title: No HEALTHCHECK configured
+    rationale: >
+      Without a health check, orchestrators cannot detect unhealthy containers
+      and route traffic away from or restart failed instances.
+    remediation: >
+      Add HEALTHCHECK CMD ... to the Dockerfile or use --health-cmd in
+      docker run.
+    reference: ops-005
+
+  - id: CTR-007
+    module: container
+    severity: MEDIUM
+    check_key: outdated_base_image
+    title: Base image has known outdated packages
+    rationale: >
+      Stale base images often contain unpatched CVEs in OS packages, providing
+      attackers with known exploitation paths.
+    remediation: >
+      Regularly rebuild images from updated base images. Use distroless or
+      minimal images to reduce attack surface.
+    reference: ctr-005
+
+  - id: CTR-008
+    module: container
+    severity: HIGH
+    check_key: dangerous_ports
+    title: Dangerous or privileged ports exposed
+    rationale: >
+      Exposing ports below 1024 (privileged ports) or well-known sensitive
+      ports (e.g., 22/SSH, 2375/Docker daemon) increases attack surface.
+    remediation: >
+      Use unprivileged ports (>= 1024) for the MCP service. Remove exposure
+      of ports 22, 2375, and 2376. Use SSH tunnels or VPNs for admin access.
+    reference: net-005

@@ -1,0 +1,58 @@
+name: sentinel MCP Security Scanner
+description: Scan MCP server configs, live endpoints, and Docker containers for security issues
+author: Helixar Security Research
+
+branding:
+  icon: shield
+  color: blue
+
+inputs:
+  config:
+    description: Path to MCP server config file to scan
+    required: false
+  endpoint:
+    description: Live MCP endpoint URL to probe
+    required: false
+  container:
+    description: Docker container name or image to inspect
+    required: false
+  fail-on:
+    description: Minimum severity that causes a non-zero exit (critical/high/medium/low/info)
+    required: false
+    default: high
+  format:
+    description: Output format (terminal/json/sarif/html)
+    required: false
+    default: sarif
+  output:
+    description: Path to write the report file
+    required: false
+    default: sentinel.sarif.json
+  safe-mode:
+    description: Probe in safe mode (observe only, no mutations)
+    required: false
+    default: "true"
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Install sentinel
+      shell: bash
+      run: pip install helixar-sentinel
+
+    - name: Run sentinel scan
+      shell: bash
+      run: |
+        ARGS=""
+        if [ -n "${{ inputs.config }}" ]; then ARGS="$ARGS --config ${{ inputs.config }}"; fi
+        if [ -n "${{ inputs.endpoint }}" ]; then ARGS="$ARGS --endpoint ${{ inputs.endpoint }}"; fi
+        if [ -n "${{ inputs.container }}" ]; then ARGS="$ARGS --container ${{ inputs.container }}"; fi
+        if [ -n "${{ inputs.output }}" ]; then ARGS="$ARGS --output ${{ inputs.output }}"; fi
+        sentinel scan $ARGS \
+          --format ${{ inputs.format }} \
+          --fail-on ${{ inputs.fail-on }}
