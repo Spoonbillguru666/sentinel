@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import List
 
-from sentinel.core import Severity, ScanResult
+from sentinel.core import ScanResult, Severity
 
 _SEVERITY_COLORS = {
     Severity.CRITICAL: "bold red",
@@ -82,9 +82,9 @@ def _render_plain(results: List[ScanResult]) -> None:
 
 
 def _render_rich(results: List[ScanResult]) -> None:
+    from rich import box
     from rich.console import Console
     from rich.table import Table
-    from rich import box
     from rich.text import Text
 
     console = Console()
